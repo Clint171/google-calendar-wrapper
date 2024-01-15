@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
 import session from 'express-session';
-import google from 'googleapis';
+import axios from 'axios';
 
 dotenv.config();
 
@@ -42,8 +42,17 @@ passport.deserializeUser((obj, cb) => {
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar'] }));
 
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    console.log('req.user', req.user);
-    res.redirect('/dashboard');
+    axios.get(`https://www.googleapis.com/calendar/v3/calendars/${req.user.profile._json.email}/events`, {
+        headers: {
+            Authorization: `Bearer ${req.user.accessToken}`
+        }
+    }).then((response) => {
+        console.log('response', response.data);
+        res.send(response.data);
+    }).catch((error) => {
+        console.log('error', error);
+        res.send(error);
+    })
 });
 
 app.get('/login', (req, res) => {
