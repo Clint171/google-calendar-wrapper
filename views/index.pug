@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    title= title
+    link(rel='stylesheet' href='./css/index.css')
+  body
+    div.container
+        h1 Hello There
+        h2 Welcome to Clints-Planner
+        p Login or register with google to continue
+        div.google-login
+            a(href='/auth/google')
+                iconify-icon(icon="flat-color-icons:google" width="50")
+                span Sign up or Login with Google
+    script(src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js")
